@@ -1,7 +1,7 @@
 // Elemen DOM
 const menuBtn = document.getElementById('menu-btn');
 const nav = document.getElementById('nav');
-const themeBtn = document.getElementById('theme-btn');
+const themeToggle = document.getElementById('theme-toggle');
 const root = document.documentElement;
 const navLinks = document.querySelectorAll('.nav-link');
 const sections = document.querySelectorAll('section[id]');
@@ -51,13 +51,21 @@ if (menuBtn && nav) {
   });
 }
 
-// --- 2. Fitur Ganti Tema (Dark / Light Mode) ---
+// --- 2. Fitur Ganti Tema (Dark / Light Mode Sesuai Toggle) ---
 function setTheme(theme) {
   root.setAttribute('data-theme', theme);
-  if (themeBtn) {
-    themeBtn.textContent = theme === 'dark' ? '☀️' : '🌙';
-    themeBtn.setAttribute('title', theme === 'dark' ? 'Ganti ke tema terang' : 'Ganti ke tema gelap');
+  const isDark = theme === 'dark';
+
+  if (themeToggle) {
+    themeToggle.setAttribute('aria-checked', isDark ? 'true' : 'false');
+    themeToggle.setAttribute(
+      'title',
+      isDark
+        ? 'Mode Gelap Aktif (Klik untuk Mode Terang)'
+        : 'Mode Terang Aktif (Klik untuk Mode Gelap)'
+    );
   }
+
   try {
     localStorage.setItem('tema', theme);
   } catch (err) {
@@ -72,14 +80,25 @@ try {
 } catch (err) {}
 
 const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
-const initialTheme = savedTheme || (prefersDark.matches ? 'dark' : 'light');
+// Default ke dark mode jika belum ada setting, agar langsung melihat tampilan seperti di gambar
+const initialTheme = savedTheme || (prefersDark.matches ? 'dark' : 'dark');
 setTheme(initialTheme);
 
-if (themeBtn) {
-  themeBtn.addEventListener('click', () => {
-    const currentTheme = root.getAttribute('data-theme') || 'light';
+if (themeToggle) {
+  // Klik seluruh toggle untuk beralih mode
+  themeToggle.addEventListener('click', (e) => {
+    const currentTheme = root.getAttribute('data-theme') || 'dark';
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
     setTheme(newTheme);
+  });
+
+  // Navigasi Aksesibilitas Keyboard (Enter / Space)
+  themeToggle.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      const currentTheme = root.getAttribute('data-theme') || 'dark';
+      setTheme(currentTheme === 'dark' ? 'light' : 'dark');
+    }
   });
 }
 

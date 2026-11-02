@@ -12,16 +12,16 @@
 }
 
 [data-theme="dark"] {
-  --bg: #0b0f19;
-  --bg-alt: #111827;
+  --bg: #000000;
+  --bg-alt: #0d1117;
   --text: #f8fafc;
   --muted: #94a3b8;
   --primary: #3b82f6;
   --primary-hover: #60a5fa;
-  --card: #151d30;
-  --border: #1e293b;
-  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
-  --shadow-hover: 0 10px 25px -3px rgba(0, 0, 0, 0.5);
+  --card: #111622;
+  --border: #1f2738;
+  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+  --shadow-hover: 0 10px 25px -3px rgba(0, 0, 0, 0.7);
 }
 
 * {
@@ -156,7 +156,7 @@ h2 {
   gap: 10px;
 }
 
-.menu-btn, .theme-btn {
+.menu-btn {
   background: var(--card);
   color: var(--text);
   border: 1px solid var(--border);
@@ -164,20 +164,144 @@ h2 {
   padding: 7px 11px;
   font-size: 1.05rem;
   cursor: pointer;
-  display: inline-flex;
+  display: none;
   align-items: center;
   justify-content: center;
   transition: all 0.2s ease;
   line-height: 1;
 }
 
-.menu-btn:hover, .theme-btn:hover {
+.menu-btn:hover {
   border-color: var(--primary);
   transform: translateY(-1px);
 }
 
-.menu-btn {
-  display: none;
+/* --- Theme Toggle Switch (Sesuai Gambar) --- */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  user-select: none;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: transparent;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 3px;
+}
+
+.toggle-icon {
+  width: 22px;
+  height: 22px;
+  display: block;
+  flex-shrink: 0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Track Kapsul Abu-abu */
+.toggle-track {
+  width: 58px;
+  height: 30px;
+  background-color: #8c919d;
+  border-radius: 999px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 3px;
+  box-sizing: border-box;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.08);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Lingkaran Penggeser (Thumb) */
+.toggle-thumb {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: #f3f4f6;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease;
+  will-change: transform;
+}
+
+/* --- State: DARK MODE (Persis Seperti di Gambar) --- */
+/* Knob berada di sebelah kiri (arah Bulan) */
+[data-theme="dark"] .moon-icon {
+  color: #ffffff;
+  opacity: 1;
+  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.4));
+}
+
+[data-theme="dark"] .toggle-track {
+  background-color: #7b818d;
+}
+
+[data-theme="dark"] .toggle-thumb {
+  transform: translateX(0);
+  background-color: #f1f5f9;
+}
+
+[data-theme="dark"] .sun-icon {
+  color: #555b68;
+  opacity: 0.65;
+}
+
+[data-theme="dark"] .sun-icon .sun-ray {
+  fill: #4b5260;
+}
+
+[data-theme="dark"] .sun-icon .sun-disk {
+  fill: #697182;
+}
+
+/* --- State: LIGHT MODE --- */
+/* Knob meluncur ke sebelah kanan (arah Matahari) */
+[data-theme="light"] .moon-icon,
+:root:not([data-theme="dark"]) .moon-icon {
+  color: #94a3b8;
+  opacity: 0.45;
+  filter: none;
+}
+
+[data-theme="light"] .toggle-track,
+:root:not([data-theme="dark"]) .toggle-track {
+  background-color: #94a3b8;
+}
+
+[data-theme="light"] .toggle-thumb,
+:root:not([data-theme="dark"]) .toggle-thumb {
+  transform: translateX(28px);
+  background-color: #ffffff;
+  box-shadow: 0 2px 7px rgba(0, 0, 0, 0.25);
+}
+
+[data-theme="light"] .sun-icon,
+:root:not([data-theme="dark"]) .sun-icon {
+  color: #f59e0b;
+  opacity: 1;
+  filter: drop-shadow(0 0 4px rgba(245, 158, 11, 0.35));
+}
+
+[data-theme="light"] .sun-icon .sun-ray,
+:root:not([data-theme="dark"]) .sun-icon .sun-ray {
+  fill: #fbbf24;
+}
+
+[data-theme="light"] .sun-icon .sun-disk,
+:root:not([data-theme="dark"]) .sun-icon .sun-disk {
+  fill: #f59e0b;
+}
+
+/* Hover Interaksi */
+.theme-toggle:hover .toggle-track {
+  filter: brightness(1.08);
+}
+.theme-toggle:hover .toggle-thumb {
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
 }
 
 /* Hero */
@@ -479,5 +603,28 @@ footer {
 
   section {
     padding: 65px 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .theme-toggle {
+    gap: 8px;
+    padding: 2px 4px;
+  }
+  .toggle-track {
+    width: 48px;
+    height: 26px;
+  }
+  .toggle-thumb {
+    width: 20px;
+    height: 20px;
+  }
+  [data-theme="light"] .toggle-thumb,
+  :root:not([data-theme="dark"]) .toggle-thumb {
+    transform: translateX(22px);
+  }
+  .toggle-icon {
+    width: 18px;
+    height: 18px;
   }
 }
